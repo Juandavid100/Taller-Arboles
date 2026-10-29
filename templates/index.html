@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CyberTree · Simulador de decisiones de ciberseguridad</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <a class="logo" href="/" aria-label="CyberTree inicio">
+      <span class="logo-mark">⟨/⟩</span> Cyber<span>Tree</span>
+    </a>
+    <span class="topbar-tag">Estructuras de Datos · Árboles binarios</span>
+  </header>
+
+  <!-- PANTALLA 1: INICIO Y SELECCIÓN DE ESCENARIO -->
+  <section id="pantalla-inicio" class="pantalla">
+    <div class="hero">
+      <p class="eyebrow">// simulador educativo</p>
+      <h1>¿Algo raro con tu seguridad digital?<br><em>Recorre el árbol.</em></h1>
+      <p class="lead">
+        CyberTree te hace preguntas de <strong>Sí</strong> o <strong>No</strong>. Cada respuesta
+        baja por una rama de un <strong>árbol binario de decisión</strong> hasta llegar a una hoja
+        con el diagnóstico y las acciones recomendadas.
+      </p>
+    </div>
+
+    <h2 class="titulo-seccion">Elige un escenario</h2>
+    <div id="lista-escenarios" class="escenarios"></div>
+  </section>
+
+  <!-- PANTALLA 2: EVALUACIÓN + ÁRBOL -->
+  <section id="pantalla-evaluacion" class="pantalla oculto">
+    <div class="barra-escenario">
+      <button id="btn-volver" class="btn-texto">← Escenarios</button>
+      <h2 id="titulo-escenario"></h2>
+    </div>
+
+    <div class="layout">
+      <!-- Panel izquierdo: pregunta o resultado -->
+      <div class="panel panel-decision">
+        <div id="tarjeta-pregunta">
+          <p class="nodo-badge">Nodo <span id="pregunta-id"></span> · Nivel <span id="pregunta-nivel"></span></p>
+          <h3 id="pregunta-texto"></h3>
+          <div class="botones">
+            <button class="btn btn-si" data-respuesta="si">Sí <small>→ izquierda</small></button>
+            <button class="btn btn-no" data-respuesta="no">No <small>→ derecha</small></button>
+          </div>
+        </div>
+
+        <div id="tarjeta-resultado" class="oculto">
+          <p class="nodo-badge">Nodo hoja <span id="resultado-id"></span></p>
+          <div id="riesgo" class="riesgo"></div>
+          <h3 id="resultado-titulo"></h3>
+          <p id="resultado-texto" class="resultado-texto"></p>
+          <h4>Qué hacer ahora</h4>
+          <ol id="resultado-recomendaciones"></ol>
+        </div>
+
+        <div class="historial">
+          <h4>Ruta recorrida</h4>
+          <ol id="historial"></ol>
+        </div>
+
+        <div class="acciones">
+          <button id="btn-atras" class="btn btn-secundario">↶ Deshacer respuesta</button>
+          <button id="btn-reiniciar" class="btn btn-secundario">⟳ Reiniciar</button>
+        </div>
+      </div>
+
+      <!-- Panel derecho: árbol visual -->
+      <div class="panel panel-arbol">
+        <div class="panel-arbol-cabecera">
+          <h4>Árbol de decisión</h4>
+          <div class="leyenda">
+            <span><i class="l-pregunta"></i>Pregunta (rama)</span>
+            <span><i class="l-hoja"></i>Resultado (hoja)</span>
+            <span><i class="l-ruta"></i>Ruta actual</span>
+          </div>
+        </div>
+        <div class="lienzo"><svg id="svg-arbol" role="img" aria-label="Árbol de decisión"></svg></div>
+      </div>
+    </div>
+
+    <!-- Estadísticas del árbol: lo que vimos en clase -->
+    <div class="panel anatomia">
+      <h4>Anatomía del árbol <small>(calculado en Python con recursión)</small></h4>
+      <div class="metricas">
+        <div class="metrica"><span id="m-nodos"></span><label>Nodos (tamaño)</label></div>
+        <div class="metrica"><span id="m-internos"></span><label>Nodos rama</label></div>
+        <div class="metrica"><span id="m-hojas"></span><label>Nodos hoja</label></div>
+        <div class="metrica"><span id="m-altura"></span><label>Altura (niveles)</label></div>
+        <div class="metrica"><span id="m-raiz"></span><label>Raíz</label></div>
+      </div>
+      <div class="recorridos">
+        <div><b>Preorden</b> <code>raíz → izq → der</code><p id="r-preorden"></p></div>
+        <div><b>Inorden</b> <code>izq → raíz → der</code><p id="r-inorden"></p></div>
+        <div><b>Postorden</b> <code>izq → der → raíz</code><p id="r-postorden"></p></div>
+        <div><b>Por niveles</b> <code>usa una cola (FIFO)</code><p id="r-niveles"></p></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="pie">
+    CyberTree es un simulador educativo basado en reglas. No analiza tu equipo ni tus cuentas reales;
+    ante un incidente grave, contacta a tu banco, a la plataforma afectada o al área de TI.
+  </footer>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
